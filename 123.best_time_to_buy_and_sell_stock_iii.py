@@ -11,7 +11,7 @@ class Solution:
         # buy-first-sell-last
         buy = float('inf')
         max_profit = 0
-        forward_profit_arr = [0] * len(prices)
+        forward_profit_arr = []
         for i, p in enumerate(prices):
             if buy > p:
                 buy = p
@@ -19,26 +19,22 @@ class Solution:
             else:
                 profit = p - buy
             max_profit = profit if profit > max_profit else max_profit
-            forward_profit_arr[i] = max_profit
+            forward_profit_arr.append(max_profit)
         # sell-first-buy-last
         sell = float('-inf')
         max_profit = 0
-        backward_profit_arr = [0] * len(prices)
-        for i, p in reversed(list(enumerate(prices))):
+        max_total = 0
+        for i in range(len(prices)-1, -1, -1):
+            p = prices[i]
             if sell < p:
                 sell = p
                 profit = 0
             else:
                 profit = sell - p
             max_profit = profit if profit > max_profit else max_profit
-            backward_profit_arr[i] = max_profit
-        # find best split index
-        max_profit = 0
-        for i, profit in enumerate(forward_profit_arr):
-            total_profit = profit
-            if i < len(prices)-1:
-                total_profit += backward_profit_arr[i+1]
-            max_profit = total_profit if total_profit > max_profit else max_profit
-        return max_profit
-    # [0, 0, 4, 3, 0, 1]
-    # [3, 4, 0, 0, 3, 0]
+            # find best split index
+            total = max_profit
+            if i > 0:
+                total += forward_profit_arr[i-1]
+            max_total = total if total > max_total else max_total
+        return max_total
