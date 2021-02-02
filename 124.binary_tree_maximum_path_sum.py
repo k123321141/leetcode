@@ -4,8 +4,7 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
-# from collections import deque
-from functools import lru_cache
+from collections import deque
 
 
 class Solution:
@@ -26,19 +25,22 @@ class Solution:
         # dp version 43%
         if root is None:
             return 0
-        self.max_sum = float('-inf')
-        self.dp(root)
-        return self.max_sum
-
-    @lru_cache
-    def dp(self, root: TreeNode) -> int: # noqa
-        if root is None:
-            return 0
-        else:
-            left_v = self.dp(root.left)
-            right_v = self.dp(root.right)
-            max_v = max(left_v, right_v) + root.val
-            pivot_v = left_v + right_v + root.val
-            self.max_sum = max(max_v, pivot_v, self.max_sum)
-
-            return max_v if max_v > 0 else 0
+        stk = deque()
+        stk.append(root)
+        arr = []
+        while stk:
+            node = stk.pop()
+            arr.append(node)
+            if node.right is not None:
+                stk.append(node.right)
+            if node.left is not None:
+                stk.append(node.left)
+        value_dict = {None: 0}
+        max_sum = float('-inf')
+        for node in arr[::-1]:
+            l = value_dict[node.left]
+            r = value_dict[node.right]
+            v = max(l, r) + node.val
+            value_dict[node] = max(0, v)
+            max_sum = max(max_sum, v, l + r + node.val)
+        return max_sum
