@@ -1,4 +1,5 @@
 from typing import Tuple, Set, List
+from functools import lru_cache
 
 
 class Solution:
@@ -8,27 +9,24 @@ class Solution:
         Use the element in candidates, or remove it.
         '''
         # ret = self.foo(candidates, target, {})
-        return list([list(t) for t in self.foo(sorted(candidates), target, {})])
+        return [list(t) for t in self.foo(tuple(sorted(candidates)), target)]
 
-    def foo(self, candidates: List[int], target: int, cache: dict) -> Set[Tuple[int]]:
+    @lru_cache
+    def foo(self, candidates: Tuple[int], target: int) -> Set[Tuple[int]]:
+
         if len(candidates) == 0 or target == 0:
             return set()
-        key = tuple(candidates) + (target, )
-        if key in cache:
-            return cache[key]
+        first = candidates[0]
+        if first > target:
+            return set()
         else:
-            first = candidates[0]
-            if first > target:
-                return set()
-            else:
+            ret = set()
+            if first == target:
                 ret = set()
-                if first == target:
-                    ret = set()
-                    ret.add((first, ))
-                else:
-                    for t in self.foo(candidates, target-first, cache):
-                        ret.add((first, ) + t)
-                    for t in self.foo(candidates[1:], target, cache):
-                        ret.add(t)
-                cache[key] = ret
-                return ret
+                ret.add((first, ))
+            else:
+                for t in self.foo(candidates, target-first):
+                    ret.add((first, ) + t)
+                for t in self.foo(candidates[1:], target):
+                    ret.add(t)
+            return ret
