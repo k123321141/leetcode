@@ -1,54 +1,40 @@
-class ptr:
-    def __init__(self, l=0):
-        self.len = l
-    
-    def __repr__(self):
-        return self.__str__()
-
-    def __str__(self):
-        return 'ptr-'+str(self.len)
-
-
 class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:  # noqa
         if len(nums) <= 1:
             return len(nums)
         '''
         Use a hash map to simulate bin which represent valid extension.
+        Every key store a left/right pair.
         '''
-        from collections import defaultdict
-        bin_dict = defaultdict(ptr)
+        bin_dict = {}
         max_len = float('-inf')
         for n in nums:
-            if bin_dict[n].len == 0:
+            if n not in bin_dict:
                 # miss
-                if bin_dict[n-1].len == 0 and bin_dict[n+1].len == 0:
-                    bin_dict[n] = ptr(1)
+                if n-1 not in bin_dict and n+1 not in bin_dict:
+                    bin_dict[n] = [n, n]
                     max_len = max(max_len, 1)
                 # concat
-                elif bin_dict[n-1].len > 0 and bin_dict[n+1].len > 0:
-                    total_len = bin_dict[n-1].len + 1 + bin_dict[n+1].len
-                    bin_dict[n-1].len = total_len
-                    bin_dict[n+1].len = total_len
-                    bin_dict[n] = bin_dict[n-1]
-                    max_len = max(max_len, total_len)
-                # extend
-                elif bin_dict[n-1].len > 0:
-                    total_len = bin_dict[n-1].len + 1
-                    bin_dict[n-1].len = total_len
-                    bin_dict[n] = bin_dict[n-1]
-                    max_len = max(max_len, total_len)
-                # extend
-                elif bin_dict[n+1].len > 0:
-                    total_len = bin_dict[n+1].len + 1
-                    bin_dict[n+1].len = total_len
-                    bin_dict[n] = bin_dict[n+1]
-                    max_len = max(max_len, total_len)
+                elif n-1 in bin_dict and n+1 in bin_dict:
+                    l, r = bin_dict[n-1][0], bin_dict[n+1][1]
+                    bin_dict[r][0] = l
+                    bin_dict[l][1] = r
+                    bin_dict[n] = True
+                    max_len = max(max_len, r-l+1)
+                # extend right
+                elif n-1 in bin_dict:
+                    l, r = bin_dict[n-1][0], n
+                    bin_dict[l][1] = r
+                    bin_dict[n] = [l, r]
+                    max_len = max(max_len, r-l+1)
+                # extend left
+                elif n+1 in bin_dict:
+                    l, r = n, bin_dict[n+1][1]
+                    bin_dict[r][0] = l
+                    bin_dict[n] = [l, r]
+                    max_len = max(max_len, r-l+1)
                 else:
                     raise Exception('No such case')
             else:
                 pass
-            for n in nums:
-                print(f'{n}: {bin_dict[n]}.len')
-        print(n, bin_dict)
         return max_len
