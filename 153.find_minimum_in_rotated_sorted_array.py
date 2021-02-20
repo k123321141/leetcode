@@ -2,10 +2,14 @@ class Solution:
     def findMin(self, nums: List[int]) -> int:  # noqa
         if len(nums) == 1:
             return nums[0]
-        pre = nums[0]
-        for n in nums[1:]:
-            if n < pre:
-                return n
+        l, r = 0, len(nums)-1
+        while nums[l] > nums[r]:
+            idx = (l+r)//2
+            if idx == l:
+                return nums[r]
             else:
-                pre = n
-        return nums[0]
+                if nums[idx] > nums[l]:
+                    l = idx
+                else:
+                    r = idx
+        return nums[l]
