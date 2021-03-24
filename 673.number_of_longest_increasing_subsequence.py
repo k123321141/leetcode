@@ -1,9 +1,5 @@
-from functools import cache
-from typing import Tuple, List
-
-
 class Solution:
-    def findNumberOfLIS(self, nums: List[int]) -> int:
+    def findNumberOfLIS(self, nums: List[int]) -> int:  # noqa
         '''
         Record max length and number of LIS for each index.
         O(N^2)
@@ -11,31 +7,32 @@ class Solution:
         '''
         if len(nums) == 1:
             return 1
+        elif len(set(nums)) == 1:
+            return len(nums)
         else:
             self.nums = nums
-            result = [self.dp(i) for i in range(len(nums))]
-            max_leng = max(result, key=lambda x: x[0])[0]
-            combination = sum([count for leng, count in result if leng == max_leng])
-            # for i in range(len(nums)):
-                # print(f'index: {i}: {self.dp(i)}')
-            # print(max_leng, combination)
-            return combination
+            leng_arr = [None] * len(nums)
+            count_arr = [None] * len(nums)
+            leng_arr[-1] = 1
+            count_arr[-1] = 1
 
-    @cache
-    def dp(self, i: int) -> Tuple[int, int]:
-        if i == len(self.nums) - 1:
-            return 1, 1
-        else:
-            # find the max_leng
-            max_leng = 1
-            combination = 1
-            for j in range(i+1, len(self.nums)):
-                if self.nums[i] < self.nums[j]:
-                    sub_leng, count = self.dp(j)
-                    leng = 1 + sub_leng
-                    if leng > max_leng:
-                        combination = count
-                        max_leng = leng
-                    elif leng == max_leng:
-                        combination += count
-            return max_leng, combination
+            max_max_leng = 1
+            max_count = 1
+            for i in reversed(range(len(nums)-1)):
+                max_leng = 1
+                combination = 1
+                for j in range(i+1, len(nums)):
+                    if nums[i] < nums[j]:
+                        if leng_arr[j] + 1 > max_leng:
+                            max_leng = leng_arr[j] + 1
+                            combination = count_arr[j]
+                        elif leng_arr[j] + 1 == max_leng:
+                            combination += count_arr[j]
+                leng_arr[i] = max_leng
+                count_arr[i] = combination
+                if max_leng > max_max_leng:
+                    max_max_leng = max_leng
+                    max_count = combination
+                elif max_leng == max_max_leng:
+                    max_count += combination
+            return max_count
