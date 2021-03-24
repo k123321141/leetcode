@@ -11,10 +11,8 @@ class Solution:
             return len(nums)
         else:
             self.nums = nums
-            leng_arr = [None] * len(nums)
-            count_arr = [None] * len(nums)
-            leng_arr[-1] = 1
-            count_arr[-1] = 1
+            leng_arr = [1] * len(nums)
+            count_arr = [1] * len(nums)
 
             max_max_leng = 1
             max_count = 1
