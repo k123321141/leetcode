@@ -1,4 +1,5 @@
 import math
+from functools import cache
 
 
 class Solution:
@@ -8,6 +9,7 @@ class Solution:
             ret = 0
         return ret
 
+    @cache
     def dp(self, s):
         if len(s) == 0:
             return 1
