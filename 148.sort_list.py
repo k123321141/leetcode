@@ -47,7 +47,6 @@ class Solution:
                 else:
                     _, pre_head = Solution.merge_two_sorted_list(pre_head, left_node, length, right_node, len_2)
                 left_node = tail
-
         return head
 
     def merge_two_sorted_list(head: ListNode, head_1: ListNode, len_1: int, head_2: ListNode, len_2: int):  # noqa
@@ -65,6 +64,7 @@ class Solution:
 
         for i in range(len_1 + len_2 - iter_count_1 - iter_count_2):
             if iter_count_1 == len_1:
+                head.next = head_2
                 last_node = head_2
                 for _ in range(len_2 - 1 - iter_count_2):
                     last_node = last_node.next
@@ -86,3 +86,5 @@ class Solution:
                 iter_count_1 += 1
                 head, head_1 = head.next, head_1.next
         return first_node, head
+    # [-702,-551,624,84,-888,-229,-791,301,-598,-129,-846,999,349,-859,395,186,87,128,318,256,456,871,867,-389,-190,-864,234,-481,536,-697,906,747]
+# [3,2,4,1]
