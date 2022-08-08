@@ -1,28 +1,34 @@
+from typing import List
+from functools import lru_cache
+from collections import defaultdict
+
+
 class Solution:
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         '''
-        DP recusive. 76%
-        Use the element in candidates, or remove it.
+        DP recusive. 97%
         '''
-        # ret = self.foo(candidates, target, {})
-        return [list(t) for t in self.foo(tuple(sorted(candidates)), target)]
+        count_dict = defaultdict(int)
+        for c in candidates:
+            count_dict[c] += 1
+        self.candidates = [(k, count_dict[k]) for k in sorted(count_dict.keys())]
+        ret = self.dp(0, target)
+        return ret
 
     @lru_cache
-    def foo(self, candidates: Tuple[int], target: int) -> Set[Tuple[int]]:
-
-        if len(candidates) == 0 or target == 0:
-            return set()
-        first = candidates[0]
-        if first > target:
-            return set()
-        else:
-            ret = set()
-            if first == target:
-                ret = set()
-                ret.add((first, ))
-            else:
-                for t in self.foo(candidates, target-first):
-                    ret.add((first, ) + t)
-                for t in self.foo(candidates[1:], target):
-                    ret.add(t)
-            return ret
+    def dp(self, idx: int, target: int) -> list:
+        candidates = self.candidates
+        ret = []
+        for i in range(idx, len(candidates)):
+            k, count = candidates[i]
+            if k > target:
+                break
+            for c in range(count):
+                v = k * (c + 1)
+                if v < target and i + 1 < len(candidates):
+                    tmp = [k] * (c + 1)
+                    for rest_arr in self.dp(i + 1, target - v):
+                        ret.append(tmp + rest_arr)
+                elif v == target:
+                    ret.append([k] * (c + 1))
+        return ret
