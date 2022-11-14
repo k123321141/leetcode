@@ -8,9 +8,15 @@ class Solution:
             ret = 1
         elif len(t) > len(s):
             ret = 0
+        elif len(t) == 1:
+            ret = 0
+            for i, c in enumerate(s):
+                if c == t[0]:
+                    ret += 1
         else:
             ret = 0
-            for i in range(len(s)):
+            n = len(s)
+            for i in range(n):
                 if i == 0:
                     sub = s[1:]
                     ret += self.numDistinct(sub, t)
