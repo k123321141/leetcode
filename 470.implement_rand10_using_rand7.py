@@ -13,4 +13,14 @@ class Solution:
         if x < 40:
             return (x % 10) + 1
         else:
-            return self.rand10()
+            return self.rand10_offset(x - 40)
+
+    def rand10_offset(self, offset: int):
+
+        a, b = rand7()-1, rand7()-1  # noqa
+        x = 7 * a + b + offset
+        upper = ((48 + offset) // 10) * 10
+        if x < upper:
+            return (x % 10) + 1
+        else:
+            return self.rand10_offset(x - upper)
