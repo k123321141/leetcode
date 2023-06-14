@@ -15,7 +15,7 @@ class Solution:
 
         Q = deque()
         Q.append((root, 1))
-        ret = float('-inf')
+weff        ret = float('-inf')
         while Q:
             node, length = Q.pop()
             if length > ret:
