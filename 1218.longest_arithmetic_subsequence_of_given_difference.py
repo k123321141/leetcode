@@ -1,6 +1,7 @@
 class Solution:
     def longestSubsequence(self, arr: List[int], difference: int) -> int:  # noqa
         jump_dict = {}
+        wefwef
         ret = 1
         # O(N)
         for i, v in enumerate(arr):
