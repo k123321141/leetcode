@@ -11,6 +11,8 @@ class Solution:
         '''
         if head is None or head.next is None:
             return None
+        elif head.next == head:
+            return head
         # cycle detect
         turtle = head
         rabbit = head
@@ -28,24 +30,18 @@ class Solution:
         while True:
             leng += 1
             turtle = self.step(turtle, 1)
-            rabbit = self.step(rabbit, 2)
             if turtle == rabbit:
                 break
         # print(f'leng {leng}')
 
         # try to find begin
-        pre = head
-        current = self.step(pre, leng)
-        next_step = self.step(current, leng)
-        while current != next_step:
-            pre = current
-            current = next_step
-            next_step = self.step(next_step, leng)
-        # now pre pointer is not in cycle
-        while pre != self.step(pre, leng):
-            pre = self.step(pre, 1)
+        start = head
+        end = self.step(start, leng)
+        while start != end:
+            start = self.step(start, 1)
+            end = self.step(end, 1)
 
-        return pre
+        return start
 
     def step(self, head, step_size):
         assert step_size > 0

@@ -45,4 +45,3 @@ class Solution:
                 elif q.right is not None:
                     return False
         return True
-

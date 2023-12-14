@@ -1,41 +1,33 @@
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:  # noqa
-        # row
+        '''
+        O(N)
+        '''
+        # memory
+        memory = [False] * (9*(9+9+9))
         for y in range(9):
-            visited = [False]*9
             for x in range(9):
                 v = board[y][x]
                 if v == '.':
                     continue
                 v = int(v) - 1
-                if visited[v]:
+                # row
+                idx = 9*y + v
+                if memory[idx]:
                     return False
                 else:
-                    visited[v] = True
-        # col
-        for x in range(9):
-            visited = [False]*9
-            for y in range(9):
-                v = board[y][x]
-                if v == '.':
-                    continue
-                v = int(v) - 1
-                if visited[v]:
+                    memory[idx] = True
+                # col
+                idx = 81 + 9*x + v
+                if memory[idx]:
                     return False
                 else:
-                    visited[v] = True
-        # cell
-        for offset_x in range(3):
-            for offset_y in range(3):
-                visited = [False]*9
-                for x in range(3):
-                    for y in range(3):
-                        v = board[y+offset_y*3][x+offset_x*3]
-                        if v == '.':
-                            continue
-                        v = int(v) - 1
-                        if visited[v]:
-                            return False
-                        else:
-                            visited[v] = True
+                    memory[idx] = True
+                # cell
+                idx = 162 + 9*(x//3 + 3*(y//3)) + v
+                if memory[idx]:
+                    return False
+                else:
+                    memory[idx] = True
+
         return True

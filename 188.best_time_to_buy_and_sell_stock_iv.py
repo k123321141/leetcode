@@ -5,7 +5,7 @@ from bisect import insort
 class Solution:
     def maxProfit(self, k: int, prices: List[int]) -> int: # noqa
         '''
-        O(kN)
+        O(kN), 97%
         Iterative searching cut-point for each interval.
 
         k = 4

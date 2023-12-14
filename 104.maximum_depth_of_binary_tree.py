@@ -10,10 +10,10 @@ class Solution:
         Run a pre-order traversal and keep tracking depth.
         '''
         if root is None:
-            return []
+            return 0
         from collections import deque
         Q = deque()
-        Q.append((root, 0))
+        Q.append((root, 1))
         max_depth = float('-inf')
         while Q:
             node, depth = Q.popleft()

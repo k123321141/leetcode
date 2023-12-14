@@ -16,5 +16,7 @@ class Solution:
             elif count_5 == 0:
                 ret.append('Buzz')
                 count_5 = 5
+            else:
+                ret.append(f'{i+1}')
 
         return ret

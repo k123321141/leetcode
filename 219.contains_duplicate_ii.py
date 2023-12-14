@@ -16,7 +16,6 @@ class Solution:
 
         left_idx = 0
         for i in range(k, len(nums)):
-
             n = nums[i]
             if n in hash_dict:
                 if hash_dict[n]:

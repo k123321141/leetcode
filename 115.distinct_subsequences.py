@@ -2,6 +2,7 @@ from functools import cache
 
 
 class Solution:
+    # 98%
     def numDistinct(self, s: str, t: str) -> int:
 
         if s == t:
