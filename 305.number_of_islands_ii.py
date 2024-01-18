@@ -1,17 +1,9 @@
-class Node:
-    def __init__(self, y, x):
-        self.y = y
-        self.x = x
-        self.children = [(y, x), ]
-
-    def __len__(self):
-        return len(self.children)
-
+class CustomList(list):
     def __hash__(self):
-        return hash((self.y, self.x))
+        return id(self)
 
     def __eq__(self, other):
-        return self.__hash__() == other.__hash__()
+        return id(self) == id(other)
 
 
 class Solution:
@@ -23,7 +15,7 @@ class Solution:
         if m == 1 and n == 1:
             return [1]
         y, x = positions[0]
-        hashdict = {(y, x): Node(y, x)}
+        hashdict = {(y, x): CustomList([(y, x), ])}
         ret = [1, ]
 
         for y, x in positions[1:]:
@@ -41,25 +33,25 @@ class Solution:
             if (y, x+1) in hashdict:
                 node_set.add(hashdict[(y, x+1)])
             if len(node_set) == 0:
-                hashdict[(y, x)] = Node(y, x)
+                hashdict[(y, x)] = CustomList([(y, x), ])
                 count = ret[-1] + 1
             elif len(node_set) == 1:
-                node = next(node_set.__iter__())
-                node.children.append((y, x))
-                hashdict[(y, x)] = node
+                largest_list = next(node_set.__iter__())
+                largest_list.append((y, x))
+                hashdict[(y, x)] = largest_list
                 count = ret[-1]
             else:
                 # get largest node
-                largest_node = max(node_set, key=lambda x: len(x))
-                largest_node.children.append((y, x))
-                hashdict[(y, x)] = largest_node
+                largest_list = max(node_set, key=lambda x: len(x))
+                largest_list.append((y, x))
+                hashdict[(y, x)] = largest_list
                 count = ret[-1]
-                for node in node_set:
-                    if node == largest_node:
+                for other in node_set:
+                    if other == largest_list:
                         continue
-                    largest_node.children.extend(node.children)
                     count -= 1
-                    for y2, x2 in node.children:
-                        hashdict[(y2, x2)] = largest_node
+                    for y2, x2 in other:
+                        hashdict[(y2, x2)] = largest_list
+                    largest_list += other
             ret.append(count)
         return ret
