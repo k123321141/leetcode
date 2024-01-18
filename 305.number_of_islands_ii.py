@@ -9,6 +9,7 @@ class CustomList(list):
 class Solution:
     def numIslands2(self, m: int, n: int, positions: List[List[int]]) -> List[int]:  # noqa
         '''
+        Just like merge sort, the main challenge is to find the amortized cost
         space O(mn)
         time amortized cost O(mn)
         '''
