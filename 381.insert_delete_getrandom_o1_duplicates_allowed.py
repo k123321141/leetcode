@@ -41,12 +41,9 @@ class RandomizedCollection:
         if pre_node:
             pre_node.next = node
 
-        if self.hash_map.get(val, None) is None:
-            self.hash_map[val] = node
-            return True
-        else:
-            self.hash_map[val] = node
-            return False
+        ret = pre_node is None
+        self.hash_map[val] = node
+        return ret
 
     def remove(self, val: int) -> bool:
         if self.hash_map.get(val, None) is not None:
@@ -84,7 +81,8 @@ class RandomizedCollection:
             return False
 
     def getRandom(self) -> int:
-        return random.choice(self.array[:self.n]).val  # noqa
+        idx = random.randint(0, self.n - 1)  # noqa
+        return self.array[idx].val
 
 
 # Your RandomizedCollection object will be instantiated and called as such:
