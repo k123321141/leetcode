@@ -31,4 +31,5 @@ class Solution:
             visited.add(i)
             for j in range(len(isConnected[i])):
                 if isConnected[i][j] == 1 and j not in visited:
+                    visited.add(j)
                     Q.append(j)
